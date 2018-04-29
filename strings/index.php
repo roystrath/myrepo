@@ -1,26 +1,6 @@
-<!DOCTYPE html>
 <?php
-//force PHP to display error - useful for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-//takes a flag that defines what kind of errors that are visible e.g E_ALL
-error_reporting(E_ALL);
- ?>
-<html>
-  <head>
-    <title>Wambua's</title>
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  </head>
-  <body>
-<?php
-
-$wambua_corrupted_samples = "N3AmE,JO9b TitlE32s,Department,Full or= Pa+rt-Time,Salary or Hourly,Typi4>/>cal Hours,Annual Sal>ary,Hou)(rly Rate
+$wambua_corrupted_sample = "
+N3AmE,JO9b TitlE32s,Department,Full or= Pa+rt-Time,Salary or Hourly,Typi4>/>cal Hours,Annual Sal>ary,Hou)(rly Rate
 A%5A%ROo4N,  M YREFFEJ,SERGEA%NT,POoLICE,F,SA%lA%ry,,&euro;10144290,
 A%45A%5ROoN,   %ANIR%AK ,POoLICE OoFFICER (&commat;A%SSIGNED A%S DETECTIVE),POoLICE,F,SA%lA%ry,,KES9412299,
 A%A%4ROoN,  R IELR%SEKEBMIK,CHIEF COoNTRA%CT EXPEDITER,GENERA%L SERVICES,F,SA%lA%ry,,KES10159290,
@@ -52,146 +32,54 @@ A%BBA%TE,  M YRRET,POoLICE OoFFICER,POoLICE,F,SA%lA%ry,,KES93354.00,
 RAM6^-IREZ-RO6^-SA,  D SOLRAC ,ALDERMAN,CITY COUNCIL,F,Salary,,&euro;11783292,
 RAM6^-IREZ, R NEB-^6UR,POLICE OFFICER,POLICE,F,Salary,,KES9335400,
 RAM6^-IREZ,   OHPLODUR,MOTOR TRUCK DRIVER,STREETS & SAN,F,Hourly,40,,&euro;356^-030
-WALK></OSZ,   KECAJ,POLICE OFFICER,POLICE,F,Salary,,KES90024090,";
-
-/**
- * The first thing we need to do is to split the above string into rows
- */
-
-/**
- * An array of $wambua_corrupted_samples
- * @var array
- *
- * @description
- * --- If you notice the above string - rows are separated using a new
- * --- PHP_EOL returns the correct 'End Of Line' symbol for this platform (windows/linux etc).
- * --- explode($separator, $str [, $limit] - optional) - returns an array of the split string
- */
-$wce_array = explode(PHP_EOL, $wambua_corrupted_samples);
-
-/**
- * A multidimensional array containing the rows and cells (2d)
- * @var array
- * @description
- * --- array_map($callback, $arrays...) - returns all elements of array after applying the callback function to each one.
- * --- explode / str_getcsv -  Parses a string input for fields in CSV format and returns an array containing the fields read.
- */
-
-$wce_array_multi = array_map(
-  function($v){
-    return explode(',',$v);
-  },$wce_array);
-
-//start the table
-echo '<table class="highlight" border="1" cellspacing="0" cellpadding="7">';
-//row counter
-$counter = 0;
-
-foreach($wce_array_multi as $row):
-  //shorthand if else
-  echo ($counter == 0) ? '<thead><tr>' : '<tr>';
-  //cell counter
-  $cell_counter = 0;
-
-  $str_joiner = "";
-  foreach($row as $cell):
-    if( $counter == 0 ):
-      $cell = camelize(sanitizeWords($cell,true));
-      echo "<th>{$cell}</th>";
-    else:
-      //we want to clean the first string(name)
-      //then clean and reverse the second(other names), then join them
-      $fullname = "";
-      //surname
-      if( $cell_counter == 0 ):
-        $surname = camelize(sanitizeWords($cell));
-      //othernames - display them as one with the above
-      elseif( $cell_counter == 1 ):
-        $fullname = $surname.', '.sanitizeWords(strrev($cell),true);
-        echo "<td>{$fullname}</td>";
-      //Typical hours
-      elseif( $cell_counter == 6):
-        echo "<td>{$cell}</td>";
-      //Annual salary
-      elseif( $cell_counter == 7):
-        $cell = sanitizeCurrencies($cell,true);
-        echo "<td>{$cell}</td>";
-      //hourly rate
-      elseif( $cell_counter == 8):
-        $cell = sanitizeCurrencies($cell,true);
-        echo "<td>{$cell}</td>";
-      //all the rest
-      else:
-        $cell = sanitizeWords($cell,true,true);
-        echo "<td>{$cell}</td>";
-      endif;
-
-    endif;
-    $cell_counter++;
-  endforeach;
-  echo ($counter == 0) ? '</tr></thead>' : '</tr>';
-$counter++;
-endforeach;
-
-//end table
-echo '</tbody></table>';
-/**
- * Simple function that removes all non letters except spaces,dashes(when specified)
- * @param  string  $string
- * @param  boolean $allow_space
- * @param  boolean $allow_hyphen
- * @return string
- */
-function sanitizeWords($string,$allow_space = false,$allow_hyphen = false){
-  //Rejex 101
-  //(condition) ? true : false;
-  //rejex - allow only letters and spaces if allowed
-  //if letters are allowed check if allow_hypen also to allow hyphens
-  $rejex = ($allow_space) ? ($allow_hyphen) ? '/[^A-Za-z -()\-]/' :'/[^A-Za-z \-]/' : '/[^A-Za-z\-]/';
-  // Removes special chars.
-  $string = preg_replace($rejex, '', $string);
-  //remove double oo's
-  $string = str_replace('oo','o',strtolower($string));
-  //remove $commat
-  $string = str_replace('&commat','&commat; ',$string);
-  //remove percentage sign
-  return camelize(str_replace('%','',$string));
-}
-/**
- * Converts the first words of the string to uppercase
- * @param  string $string non-camelized string
- * @return string         camelized string
- */
-function camelize($string){
-  return ucwords(strtolower($string));
-}
-/**
- * Clean up the currency string
- * @param  string  $string
- * @param  boolean $add_decimal
- * @return string
- */
-function sanitizeCurrencies($string,$add_decimal = false){
-  //replace all non-currency words/symbols
-  $rejex = '/[^0-9&euro$KES;]/';
-  $string = preg_replace($rejex,'',$string);
-  //replace KESK
-  $string = str_replace('KESK','KES',$string);
-  //get the numbers only
-  $number_value = preg_replace('/[^0-9]/','',$string);
-  //get the currency string (KES,dollar and euro)
-  //We use substr($str, $start [, $length])
-  $currency = substr($string, 0,-strlen($number_value));
-  //shorthand if
-  //if decimal format then join the currency and number else show the initial string
-  $string = ($add_decimal) ? $currency.number_format((float)($number_value/100),2) : $string;
-
-  //remove 0.00 and return string
-  return ($string == "0.00") ? '' : $string;
-}
+WALK></OSZ,   KECAJ,POLICE OFFICER,POLICE,F,Salary,,KES90024090,
+";
+//we need a way of spliting the string into rows
+$rows= explode('  ', $wambua_corrupted_sample);
+//We have identified that the first row is the table header
+//we then save that row as a variable and delete it from the array
+$column_name=explode(',' , $rows[0]);
+array_splice($rows,0,1);
+//This funtion will be used to remove special characters from the string
+function clean($row_data) {
+     $string = preg_replace('/[^A-Za-z0-9\-]/', '', $row_data);
+        echo ucwords(strtoupper($string));
+        }
 ?>
+<!--We craete a table to display the data from the row array -->
+<table border="1" cellspacing="10" cellpadding="10">
+    <thead>
+          <?php
+          //We loop through the array to get individual column names
+        foreach ($column_name as $column_header){
+            ?>
+         <th>
+            <?php clean($column_header); ?>
+            </th>
+       <?php }
+        ?>
 
-<!-- Compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-</body>
-</html>
+     <?php
+      //We loop through the row array to get individual row data
+        foreach ($rows as $row){
+            ?>
+         <tr>
+            <?php
+       //We explode the individual row data by using a ',' to get individual column data
+            $row= explode(',', $row);
+            foreach ($row as $row_data){
+?>
+                 <td>
+                    <?php
+                  clean($row_data); ?>
+                  </td>
+                  <?php
+            }
+             ?>
+
+            </tr>
+       <?php }
+        ?>
+    </thead>
+
+</table>
