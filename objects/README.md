@@ -49,7 +49,9 @@ Abstraction provides you a generalized view of your classes or object by providi
 **Abstraction** is the process of hiding the working style of an object, and showing the information of an object in understandable manner.
 - **Encapsulation**; means hiding the internal details of an object, i.e. how an object does something.
 - **Inheritance**; is the process of object re-usability.
-
+- **Interfaces** resemble abstract classes in that they include abstract methods that the programmer must define in the classes that inherit from the interface.
+- **Polymorphism**;one name many forms.The real value of polymorphism is that objects
+with the same interface can be called to do different things.
 
 #### Encouragement
 > In learning OOP and design patterns for PHP, you need to remember a couple of points,
