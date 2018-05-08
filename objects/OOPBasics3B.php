@@ -27,12 +27,12 @@ class Remember{
         #stores event in memory
     }
 }
-    //create an object
+    #create an object
     $newObject = new Remember();
 
     #encapsulation
     $event = 'Birthday';
-    
+
     #in encapsulation (hiding the internal details of an object), we know what the function does but not how it works
     $newObject->storeInMemory($event);
 
