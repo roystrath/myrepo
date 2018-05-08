@@ -63,7 +63,13 @@ sides in Design Patterns: Elements of Reusable Object-Oriented Software: _1). De
 2. Chapter 6 - Programming PHP. Kevin Tatroe, Peter MacIntyre and Rasmus Lerdorf
 3. [PHP OOP Basics][6a61e70e]
 4. [No Time For OOP or Design Patterns?][c5975f08] ✳️✳️✳️✳️✳️
+5. [General Polymorphism with PHP examples][8d213112]
+6. [DRY Principle][368579b0]
+7. [Understanding Object-Oriented Programming][f1dbcfd9]
 
   [c5975f08]: http://www.php5dp.com/no-time-for-oop-or-design-patterns/ "No Time For OOP or Design Patterns"
   [6a61e70e]: http://www.saviost.net/object-oriented-programming-oop-encapsulation-inheritance-polymorphism-abstraction/ "PHP OOP Basics"
+  [8d213112]: https://stackoverflow.com/questions/8542661/general-polymorphism-with-php-examples "General Polymorphism with PHP examples"
+  [368579b0]: https://en.wikipedia.org/wiki/Don't_repeat_yourself "DRY"
+  [f1dbcfd9]: https://code.tutsplus.com/tutorials/object-oriented-php-for-beginners--net-12762 "Understanding Object-Oriented Programming"
 >_"Do not pray for tasks equal to your powers. Pray for powers equal to your tasks."_ Phillips Brooks ✍✍
