@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 <<<<<<< HEAD
 /*
@@ -25,6 +26,8 @@
 
 
 
+=======
+>>>>>>> e5a588c5afc82747eadb975a4d3b8c80d1af6363
 
  <?php
 /*
@@ -48,7 +51,6 @@
   5. Push the changes to your repo.
   6. Submit the github url on google classroom (Check Quiz 1 3B)
  */
-
 
 $raw = "'Joy is the serious business of heaven.'.LEWIS,CLIVE STAPLES.1964-01-01.https://bit.ly/2HwPJd6
 |'We were not meant to be somebody--we were meant to know Somebody'.PIPER,JOHN STEPHEN.2011-07-17.https://bit.ly/2r31InJ|'He who sings prays twice.'.Hipponensis,Aurelius Augustinus.430-02-30.https://bit.ly/2JwSHuH
@@ -97,7 +99,7 @@ foreach($iterData as $key) {
 
 
 
- ?>
+
 
  ?>
 =======
